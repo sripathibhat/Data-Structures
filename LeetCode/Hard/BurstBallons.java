@@ -1,4 +1,5 @@
 // 312
+// TLE for 1 test case
 class Solution {
     Map<StringBuilder, Integer> map = new TreeMap<StringBuilder, Integer>();
     public int maxCoins(int[] nums) {
