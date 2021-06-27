@@ -1,4 +1,5 @@
 class Solution {
+    // Time needed to inform all employees = Time needed for manager + Max time needed among all subordinates to inform their subordinates
     public int numOfMinutes(int n, int headID, int[] manager, int[] informTime) {
         Map<Integer, List<Integer>> map = new HashMap<>();
         for(int i = 0; i < n; i++) {         

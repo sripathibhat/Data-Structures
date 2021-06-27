@@ -2,6 +2,9 @@ class Solution {
     public int[] findRedundantConnection(int[][] edges) {
         
         // DFS
+        // Iterate over the edges and add them to the graph iff the edge[1] cannot be visited directly/indirectly from edge[0]
+        // if edge[1] can be reached from edge[0] already without even adding this edge, then it indicates that there is already a path to reach
+        // edge[1] from edge[0], so discard the current edge - it is redundant
         Set<Integer> visited = new HashSet<>();
         List<Integer> graph[] = new ArrayList[1001];
         for(int i = 0; i < 1001; i++) {
