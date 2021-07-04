@@ -5,6 +5,11 @@ class Twitter {
     int time;
     
     /** Initialize your data structure here. */
+
+    // 2 maps - Map<UserId, List of tweets done by userId>
+    // Map<UserId, Set of users whom this userId is following>
+    // Newsfeed generation is at runtime, get all tweets done by the user and tweets of his followees, put them to a minHeap of size K (10) sorted by tweet time
+    // when size > k, remove a tweet which will always remove the least recently posted tweet
     public Twitter() {
         tweets = new HashMap<>();
         followees = new HashMap<>();
