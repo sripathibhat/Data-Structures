@@ -23,17 +23,26 @@ class Solution {
         
         
         // swap sort - No extra space
-        int i = 0;
-        while(i < nums.length) {
-            if(nums[nums[i] - 1] != nums[i]) {
-                swap(nums, i, nums[i] - 1);
+        // int i = 0;
+        // while(i < nums.length) {
+        //     if(nums[nums[i] - 1] != nums[i]) {
+        //         swap(nums, i, nums[i] - 1);
+        //     } else {
+        //         i++;
+        //     }
+        // }
+        // for(i = 0; i < nums.length; i++) {
+        //     if(nums[i] != i + 1) {
+        //         res.add(nums[i]);
+        //     }
+        // }
+
+        // Negation logic
+        for(int i = 0; i < nums.length; i++) {
+            if(nums[Math.abs(nums[i]) - 1] < 0) {
+                res.add(Math.abs(nums[i]));
             } else {
-                i++;
-            }
-        }
-        for(i = 0; i < nums.length; i++) {
-            if(nums[i] != i + 1) {
-                res.add(nums[i]);
+                nums[Math.abs(nums[i]) - 1] = -nums[Math.abs(nums[i]) - 1];
             }
         }
         return res;
