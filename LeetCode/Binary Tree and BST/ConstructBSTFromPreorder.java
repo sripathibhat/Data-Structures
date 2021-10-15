@@ -29,6 +29,7 @@
  */
 class Solution {
     public TreeNode bstFromPreorder(int[] preorder) {
+        // return helper(Integer.MIN_VALUE, Integer.MAX_VALUE, preorder);
         return solve(0, preorder.length - 1, preorder);
     }
     
@@ -51,6 +52,19 @@ class Solution {
         } else {
             node.left = solve(start + 1, end, pre);
         }
+        return node;
+    }
+
+    int index = 0;
+    private TreeNode helper(int start, int end, int pre[]) {
+        if(index >= pre.length || pre[index] < start || pre[index] > end) {
+            return null;
+        }
+        int val = pre[index];
+        TreeNode node = new TreeNode(val);
+        index++;
+        node.left = helper(start, val - 1, pre);
+        node.right = helper(val + 1, end, pre);
         return node;
     }
 }
