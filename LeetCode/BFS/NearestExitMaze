@@ -1,0 +1,51 @@
+class Solution {
+
+    class Pair {
+        int first;
+        int second;
+        int step;
+        Pair (int first, int second, int step) {
+            this.first = first;
+            this.second = second;
+            this.step = step;
+        }
+    }
+
+    public int nearestExit(char[][] maze, int[] entrance) {
+        int m = maze.length;
+        int n = maze[0].length;
+
+        int x = entrance[0];
+        int y = entrance[1];
+
+        int directions[][] = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}};
+        
+        int ans = 0;  
+        Queue<Pair> queue = new LinkedList<Pair>();
+        queue.add(new Pair(x, y, 0));
+        
+        while (!queue.isEmpty()) {
+            int row = queue.peek().first;
+            int col = queue.peek().second;
+            int step = queue.peek().step;
+            maze[row][col] = '+';
+            queue.poll();
+
+            for (int i = 0; i < directions.length; i++){
+                int nrow = row + directions[i][0];
+                int ncol = col + directions[i][1];
+
+                if (nrow >= 0 && nrow < m && ncol >= 0 && ncol < n && maze[nrow][ncol] == '.') {
+                    maze[nrow][ncol] = '+';
+                    queue.add(new Pair(nrow, ncol, step + 1));   
+                    if (nrow == 0 || ncol == 0 || nrow == m - 1 || ncol == n - 1) {
+                        ans = step + 1;
+                        return ans;
+                    }
+                }
+            }
+            
+        }
+        return -1;
+    }
+}
