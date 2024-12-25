@@ -48,9 +48,9 @@ class Solution {
         boolean pacific[][] = new boolean[m][n];
         boolean atlantic[][] = new boolean[m][n];
 
-        for (int i = 0; i < n; i++) {
-            dfs(0, i, pacific, heights, heights[0][i]);
-            dfs(m - 1, i, atlantic, heights, heights[m - 1][i]);
+        for (int j = 0; j < n; j++) {
+            dfs(0, j, pacific, heights, heights[0][j]);
+            dfs(m - 1, j, atlantic, heights, heights[m - 1][j]);
         }
         for (int i = 0; i < m; i++) {
             dfs(i, 0, pacific, heights, heights[i][0]);
