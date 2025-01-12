@@ -18,7 +18,38 @@ class Solution {
             board.add(l);
         }
         solve(board, 0, n);
+        // solveWithSet(board, 0, n, res, new HashSet(), new HashSet(), new HashSet());
         return res;
+    }
+
+    private void solveWithSet(List<List<String>> board, int r, int n, List<List<String>> res,
+                              Set<Integer> colSet, Set<Integer> posDiagSet, Set<Integer> negDiagSet) {
+        if (r == n) {
+            List<String> l = new ArrayList<>();
+            for (int i = 0; i < n; i++) {
+                String x = "";
+                for (int j = 0; j < n; j++) {
+                    x += board.get(i).get(j);
+                }
+                l.add(x);
+            }
+            res.add(l);
+            return;
+        }
+        for (int c = 0; c < n; c++) {
+            if (colSet.contains(c) || posDiagSet.contains(r + c) || negDiagSet.contains(r - c)) {
+                continue;
+            }
+            colSet.add(c);
+            posDiagSet.add(r + c);
+            negDiagSet.add(r - c);
+            board.get(r).set(c, "Q");
+            solveWithSet(board, r + 1, n, res, colSet, posDiagSet, negDiagSet);
+            colSet.remove(c);
+            posDiagSet.remove(r + c);
+            negDiagSet.remove(r - c);
+            board.get(r).set(c, ".");
+        }
     }
     
     private void solve(List<List<String>> board, int col, int n) {
