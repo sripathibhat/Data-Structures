@@ -77,7 +77,8 @@ class FindElements {
     Set<Integer> set;
     public FindElements(TreeNode root) {
         set = new HashSet<>();
-        bfs(root);
+        // bfs(root);
+        dfs(root, 0);
     }
     
     public boolean find(int target) {
@@ -100,6 +101,15 @@ class FindElements {
                 q.add(node.right);
             }
         }
+    }
+
+    private void dfs(TreeNode node, int val) {
+        if (node == null) {
+            return;
+        }
+        set.add(val);
+        dfs(node.left, val * 2 + 1);
+        dfs(node.right, val * 2 + 2);
     }
 }
 
