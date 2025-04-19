@@ -44,37 +44,59 @@ class Solution {
     }
 
     public int findMaximizedCapital(int k, int w, int[] profits, int[] capital) {
-        int n = profits.length;
-        List<Project> projects = new ArrayList<>();
+        // Using 2 heaps
 
-        // Creating list of projects with capital and profits
-        for (int i = 0; i < n; i++) {
-            projects.add(new Project(capital[i], profits[i]));
+        PriorityQueue<Integer> maxHeap = new PriorityQueue<>((a, b) -> b - a);
+        PriorityQueue<Project> minHeap = new PriorityQueue<>((a, b) -> a.capital - b.capital);
+        for (int i = 0; i < capital.length; i++) {
+            minHeap.add(new Project(capital[i], profits[i]));
         }
 
-        // Sorting projects by capital required
-        Collections.sort(projects, (a, b) -> a.capital - b.capital);
-
-        // Max-heap to store profits
-        PriorityQueue<Integer> maxHeap = new PriorityQueue<>((a, b) -> b - a);
-        int i = 0;
-
-        // Main loop to select up to k projects
-        for (int j = 0; j < k; j++) {
-            // Add all profitable projects that we can afford
-            while (i < n && projects.get(i).capital <= w) {
-                maxHeap.add(projects.get(i).profit);
-                i++;
+        for (int i = 0; i < k; i++) {
+            while (!minHeap.isEmpty() && minHeap.peek().capital <= w) {
+                maxHeap.add(minHeap.poll().profit);
             }
-
-            // If no projects can be funded, break out of the loop
             if (maxHeap.isEmpty()) {
                 break;
             }
-
-            // Otherwise, take the project with the maximum profit
             w += maxHeap.poll();
         }
+     
         return w;
+
+
+        // Using max heap and sorting captial in ASC order.
+        // int n = profits.length;
+        // List<Project> projects = new ArrayList<>();
+
+        // // Creating list of projects with capital and profits
+        // for (int i = 0; i < n; i++) {
+        //     projects.add(new Project(capital[i], profits[i]));
+        // }
+
+        // // Sorting projects by capital required
+        // Collections.sort(projects, (a, b) -> a.capital - b.capital);
+
+        // // Max-heap to store profits (using a min-heap with inverted values)
+        // PriorityQueue<Integer> maxHeap = new PriorityQueue<>((a, b) -> b - a);
+        // int i = 0;
+
+        // // Main loop to select up to k projects
+        // for (int j = 0; j < k; j++) {
+        //     // Add all profitable projects that we can afford
+        //     while (i < n && projects.get(i).capital <= w) {
+        //         maxHeap.add(projects.get(i).profit);
+        //         i++;
+        //     }
+
+        //     // If no projects can be funded, break out of the loop
+        //     if (maxHeap.isEmpty()) {
+        //         break;
+        //     }
+
+        //     // Otherwise, take the project with the maximum profit
+        //     w += maxHeap.poll();
+        // }
+        // return w;
     }
 }
