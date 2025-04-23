@@ -21,26 +21,54 @@ in any substring and thus are considered as extra characters. Hence, we return 3
 */
 
 class TrieNode {
-    Map<Character, TrieNode> children = new HashMap();
-    boolean isWord = false;
+    TrieNode children[];
+    boolean isWord;
+
+    TrieNode() {
+        children = new TrieNode[26];
+        isWord = false;
+    }
+}
+
+class Trie {
+    TrieNode root;
+
+    Trie() {
+        root = new TrieNode();
+    }
+
+    public void addWord(String word) {
+        TrieNode cur = root;
+        for (char c: word.toCharArray()) {
+            if (cur.children[c - 'a'] == null) {
+                cur.children[c - 'a'] = new TrieNode();
+            }
+            cur = cur.children[c - 'a'];
+        }
+        cur.isWord = true;
+    }
 }
 
 class Solution {
     public int minExtraChar(String s, String[] dictionary) {
         int n = s.length();
-        var root = buildTrie(dictionary);
-        var dp = new int[n + 1];
+        Trie trie = new Trie();
+        int dp[] = new int[n + 1];
 
-        for (int start = n - 1; start >= 0; start--) {
-            dp[start] = dp[start + 1] + 1;
-            var node = root;
-            for (int end = start; end < n; end++) {
-                if (!node.children.containsKey(s.charAt(end))) {
+        for (String word: dictionary) {
+            trie.addWord(word);
+        }
+
+        for (int i = n - 1; i >= 0; i--) {
+            dp[i] = dp[i + 1] + 1;
+            TrieNode node = trie.root;
+            for (int j = i; j < n; j++) {
+                if (node.children[s.charAt(j) - 'a'] == null) {
                     break;
                 }
-                node = node.children.get(s.charAt(end));
+                node = node.children[s.charAt(j) - 'a'];
                 if (node.isWord) {
-                    dp[start] = Math.min(dp[start], dp[end + 1]);
+                    dp[i] = Math.min(dp[i], dp[j + 1]);
                 }
             }
         }
@@ -49,12 +77,14 @@ class Solution {
     }
 
     private TrieNode buildTrie(String[] dictionary) {
-        var root = new TrieNode();
-        for (var word : dictionary) {
-            var node = root;
-            for (var c : word.toCharArray()) {
-                node.children.putIfAbsent(c, new TrieNode());
-                node = node.children.get(c);
+        TrieNode root = new TrieNode();
+        for (String word : dictionary) {
+            TrieNode node = root;
+            for (char c : word.toCharArray()) {
+                if (node.children[c - 'a'] == null) {
+                    node.children[c - 'a'] = new TrieNode();
+                }
+                node = node.children[c];
             }
             node.isWord = true;
         }
