@@ -1,0 +1,133 @@
+/**
+You are given an n x n binary matrix grid. You are allowed to change at most one 0 to be 1.
+
+Return the size of the largest island in grid after applying this operation.
+
+An island is a 4-directionally connected group of 1s.
+ 
+
+Example 1:
+
+Input: grid = [[1,0],[0,1]]
+Output: 3
+Explanation: Change one 0 to 1 and connect two 1s, then we get an island with area = 3.
+
+
+Example 2:
+
+Input: grid = [[1,1],[1,0]]
+Output: 4
+Explanation: Change the 0 to 1 and make the island bigger, only one island with area = 4.
+
+
+Example 3:
+
+Input: grid = [[1,1],[1,1]]
+Output: 4
+Explanation: Can't change any 0 to 1, only one island with area = 4.
+*/
+
+
+class Solution {
+
+    private boolean isValid(int i, int j, int grid[][]) {
+        return (i >= 0 && i < grid.length && j >= 0 && j < grid[i].length && grid[i][j] == 1);
+    }
+
+    public int largestIsland(int[][] grid) {
+        int m = grid.length;
+        int n = grid[0].length;
+        DSU dsu = new DSU(m * n);
+        int dirs[][] = {{0, -1}, {0, 1}, {-1, 0}, {1, 0}};
+
+        // Step 1 - Create connected components
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                if (grid[i][j] == 1) {
+                    for (int k = 0; k < dirs.length; k++) {
+                        int nr = i + dirs[k][0];
+                        int nc = j + dirs[k][1];
+                        if (isValid(nr, nc, grid)) {
+                            int nodeNo = n * i + j;
+                            int neiNodeNo = n * nr + nc;
+                            if (dsu.findUltimatePar(nodeNo) != dsu.findUltimatePar(neiNodeNo)) {
+                                dsu.unionBySize(nodeNo, neiNodeNo);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        // Step 2 - Check for largest island size
+        int max = 0;
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                if (grid[i][j] == 0) {
+                    Set<Integer> neiSet = new HashSet();
+                    int area = 1;
+                    for (int k = 0; k < dirs.length; k++) {
+                        int nr = i + dirs[k][0];
+                        int nc = j + dirs[k][1];
+                        if (isValid(nr, nc, grid)) {
+                            neiSet.add(dsu.findUltimatePar(n * nr + nc));
+                        }
+                    }
+                    for (int s: neiSet) {
+                        area += dsu.getSize(s);
+                    }
+                    max = Math.max(max, area);
+                } 
+            }
+        }
+        
+        // Edge case - All are 1s, no 0s
+        if (max == 0 && grid[0][0] == 1) {
+            max = Math.max(max, dsu.getSize(dsu.findUltimatePar(0)));
+        }
+        return max;
+    }
+}
+
+class DSU {
+        private int n;
+        private int size[];
+        private int par[];
+
+        public DSU(int n) {
+            this.n = n;
+            size = new int[n];
+            par = new int[n];
+            for (int i = 0; i < n; i++) {
+                size[i] = 1;
+                par[i] = i;
+            }
+        }
+
+        public int findUltimatePar(int u) {
+            if (par[u] != u) {
+                par[u] = findUltimatePar(par[u]);
+            }
+            return par[u];
+        }
+
+        public void unionBySize(int u, int v) {
+            int paru = findUltimatePar(u);
+            int parv = findUltimatePar(v);
+            if (paru == parv) {
+                return;
+            }
+            if (size[paru] < size[parv]) {
+                par[paru] = parv;
+                size[parv] += size[paru];
+            } else {
+                par[parv] = paru;
+                size[paru] += size[parv];
+            }
+        }
+
+        public int getSize(int u) {
+            return size[u];
+        }
+    }
+
