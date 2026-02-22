@@ -65,4 +65,38 @@ class Solution {
         }
         return nsl;
     }
+
+
+    // Monotonic stack
+    public int largestRectangleArea(int[] heights) {
+        Stack<Integer> stack = new Stack();
+        int maxArea = 0;
+        int i = 0;
+
+        while (i < heights.length) {
+            // If current bar is higher than stack top, push it
+            if (stack.isEmpty() || heights[i] >= heights[stack.peek()]) {
+                stack.push(i);
+                i++;
+            } else {
+                // Pop the top and calculate area with popped bar as smallest
+                int top = stack.pop();
+                // Calculate area with heights[topOfStack] as the smallest bar
+                // Width is determined by current index and the previous index in stack
+                int width = stack.isEmpty() ? i : i - stack.peek() - 1;
+                int area = heights[top] * width;
+                maxArea = Math.max(maxArea, area);
+            }
+        }
+
+        // Pop remaining bars from stack and calculate area
+        while (!stack.isEmpty()) {
+            int top = stack.pop();
+            int width = stack.isEmpty() ? i : i - stack.peek() - 1;
+            int area = heights[top] * width;
+            maxArea = Math.max(maxArea, area);
+        }
+
+        return maxArea;
+    }
 }
