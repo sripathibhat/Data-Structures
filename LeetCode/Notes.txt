@@ -1,0 +1,3 @@
+Preparation related notes
+
+LeetCode 14 Patterns Mastery: 130 Questions with Company Insights - https://leetcode.com/discuss/post/6853134/leetcode-14-patterns-mastery-130-questio-bx4e/
