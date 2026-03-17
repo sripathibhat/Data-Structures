@@ -5,6 +5,7 @@ LeetCode 14 Patterns Mastery: 130 Questions with Company Insights - https://leet
 System design resources:
 
 https://github.com/ashishps1/awesome-system-design-resources
+https://interviewgpt.deepchill.app/
 
 hello interview
 code karle
